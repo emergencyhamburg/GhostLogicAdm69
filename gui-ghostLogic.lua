@@ -25,39 +25,33 @@ local OrionLib = {
 	SaveCfg = false
 }
 
---Feather Icons https://github.com/evoincorp/lucideblox/tree/master/src/modules/util - Created by 7kayoh
+-- Feather Icons
 local Icons = {}
---[[
-local Success, Response = pcall(function()
-	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
-end)
 
-if not Success then
-	
-end	
-]]
-
-getgenv().gethui = function() 
-  return game.CoreGui 
+getgenv().gethui = function()
+	return game.CoreGui
 end
 
 local function GetIcon(IconName)
-	if Icons[IconName] ~= nil then
+	if Icons[IconName] then
 		return Icons[IconName]
-	else
-		return nil
 	end
-end   
-
-local Orion = Instance.new("ScreenGui")
-Orion.Name = "Orion"
-if syn then
-	syn.protect_gui(Orion)
-	Orion.Parent = game.CoreGui
-else
-	Orion.Parent = gethui() or game.CoreGui
+	return nil
 end
 
+-- GUI principale
+local Orion = Instance.new("ScreenGui")
+Orion.Name = "Black Protect"
+Orion.ResetOnSpawn = false
+Orion.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+if syn and syn.protect_gui then
+	syn.protect_gui(Orion)
+end
+
+Orion.Parent = gethui() or game.CoreGui
+
+-- suppression des doublons
 if gethui then
 	for _, Interface in ipairs(gethui():GetChildren()) do
 		if Interface.Name == Orion.Name and Interface ~= Orion then
@@ -78,7 +72,6 @@ function OrionLib:IsRunning()
 	else
 		return Orion.Parent == game:GetService("CoreGui")
 	end
-
 end
 
 local function AddConnection(Signal, Function)
