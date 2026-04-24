@@ -12,12 +12,12 @@ local OrionLib = {
 	Flags = {},
 	Themes = {
 		Default = {
-			Main = Color3.fromRGB(0, 20, 60),        -- bleu foncé
-			Second = Color3.fromRGB(0, 35, 90),      -- bleu secondaire
-			Stroke = Color3.fromRGB(70, 130, 200),   -- contour bleu clair
-			Divider = Color3.fromRGB(40, 90, 160),   -- séparateurs
-			Text = Color3.fromRGB(220, 235, 255),    -- texte clair bleuté
-			TextDark = Color3.fromRGB(140, 180, 220) -- texte secondaire bleu/gris
+			Main = Color3.fromRGB(25, 0, 0),        -- rouge très foncé / noir rouge
+			Second = Color3.fromRGB(60, 0, 0),      -- rouge sombre
+			Stroke = Color3.fromRGB(200, 0, 0),     -- rouge vif (contours)
+			Divider = Color3.fromRGB(90, 0, 0),     -- séparateurs rouge sombre
+			Text = Color3.fromRGB(255, 220, 220),   -- texte rouge très clair
+			TextDark = Color3.fromRGB(180, 120, 120) -- texte secondaire rouge/gris
 		}
 	},
 	SelectedTheme = "Default",
@@ -25,33 +25,39 @@ local OrionLib = {
 	SaveCfg = false
 }
 
--- Feather Icons
+--Feather Icons https://github.com/evoincorp/lucideblox/tree/master/src/modules/util - Created by 7kayoh
 local Icons = {}
+--[[
+local Success, Response = pcall(function()
+	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
+end)
 
-getgenv().gethui = function()
-	return game.CoreGui
+if not Success then
+	
+end	
+]]
+
+getgenv().gethui = function() 
+  return game.CoreGui 
 end
 
 local function GetIcon(IconName)
-	if Icons[IconName] then
+	if Icons[IconName] ~= nil then
 		return Icons[IconName]
+	else
+		return nil
 	end
-	return nil
-end
+end   
 
--- GUI principale
 local Orion = Instance.new("ScreenGui")
-Orion.Name = "Black Protect"
-Orion.ResetOnSpawn = false
-Orion.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-if syn and syn.protect_gui then
+Orion.Name = "Orion"
+if syn then
 	syn.protect_gui(Orion)
+	Orion.Parent = game.CoreGui
+else
+	Orion.Parent = gethui() or game.CoreGui
 end
 
-Orion.Parent = gethui() or game.CoreGui
-
--- suppression des doublons
 if gethui then
 	for _, Interface in ipairs(gethui():GetChildren()) do
 		if Interface.Name == Orion.Name and Interface ~= Orion then
@@ -72,6 +78,7 @@ function OrionLib:IsRunning()
 	else
 		return Orion.Parent == game:GetService("CoreGui")
 	end
+
 end
 
 local function AddConnection(Signal, Function)
